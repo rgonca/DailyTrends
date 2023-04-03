@@ -124,7 +124,7 @@ List of available routes:
 `DELETE /v1/feeds/:feedId` - delete feed\
 `POST /v1/feeds/today` - stores todays feeds\
 `GET /v1/feeds/today` - get all of todays feed
-
+```
 ## Custom Mongoose Plugin
 
 The app also contains a custom mongoose plugin that you can attach to any mongoose model schema. You can find it in `src/models/plugins`.
