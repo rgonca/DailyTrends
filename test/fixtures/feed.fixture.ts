@@ -34,7 +34,7 @@ const feedThree: IFeedFixture = {
     publishedAt: currentDate
 };
 
-const insertFeeds = async (feeds: any[]) => {
+const insertFeeds = async (feeds: IFeedFixture[]) => {
     await Feed.insertMany(feeds);
 };
 

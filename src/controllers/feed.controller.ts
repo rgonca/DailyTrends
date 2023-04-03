@@ -3,6 +3,7 @@ import feedService from "../services/feed.service";
 import httpStatus from "http-status";
 import { IFeed } from "../interfaces/feed.interface";
 import currentDate from "../utils/date";
+
 const createFeed = async (req: Request, res: Response) => {
     try {
         const { headline, url, author = '', location = '', footer = '' } = req.body
@@ -26,9 +27,27 @@ const createFeed = async (req: Request, res: Response) => {
     }
 }
 
+const storeTodayFeeds = async (req: Request, res: Response) => {
+    try {
+        const feeds = await feedService.storeFeeds(currentDate)
+        res.status(httpStatus.CREATED).send(feeds)
+    } catch (error) {
+        res.send(error);
+    }
+}
+
 const getFeeds = async (req: Request, res: Response) => {
     try {
         const feeds = await feedService.getFeeds()
+        res.status(httpStatus.OK).send(feeds)
+    } catch (error) {
+        res.send(error);
+    }
+};
+
+const getTodayFeeds = async (req: Request, res: Response) => {
+    try {
+        const feeds = await feedService.getTodayFeeds(currentDate)
         res.status(httpStatus.OK).send(feeds)
     } catch (error) {
         res.send(error);
@@ -79,4 +98,4 @@ const deleteFeed = async (req: Request, res: Response) => {
     }
 };
 
-export { createFeed, getFeeds, getFeed, updateFeed, deleteFeed };
+export { createFeed, storeTodayFeeds, getFeeds, getFeed, updateFeed, deleteFeed, getTodayFeeds };

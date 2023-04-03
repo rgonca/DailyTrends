@@ -1,12 +1,12 @@
 import { Types } from "mongoose";
 
 interface IFeed {
-    headline: string;
+    headline?: string;
     url?: string;
-    author: string;
-    location: string;
-    footer: string;
-    publishedAt: string;
+    author?: string;
+    location?: string;
+    footer?: string;
+    publishedAt?: string;
 }
 
 interface IFeedTest {

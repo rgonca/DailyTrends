@@ -1,33 +1,37 @@
-import 'jest';
-import request from 'supertest';
+import "jest";
+import request from "supertest";
 import { faker } from "@faker-js/faker";
-import httpStatus from 'http-status'
+import httpStatus from "http-status";
 import app from "../../src/app";
-import setupTestDB from '../utils/setupTestDB'
-import Feed from '../../src/models/feed.model';
-import { feedOne, feedTwo, feedThree, insertFeeds } from '../fixtures/feed.fixture';
-import { IFeedTest } from '../../src/interfaces/feed.interface';
-import currentDate from '../../src/utils/date';
+import setupTestDB from "../utils/setupTestDB";
+import Feed from "../../src/models/feed.model";
+import {
+    feedOne,
+    feedTwo,
+    feedThree,
+    insertFeeds
+} from "../fixtures/feed.fixture";
+import { IFeedTest } from "../../src/interfaces/feed.interface";
+import currentDate from "../../src/utils/date";
 setupTestDB();
 
-
-describe('Feed routes', () => {
-    describe('POST /api/v1/feeds', () => {
-        let newFeed: IFeedTest
+describe("Feed routes", () => {
+    describe("POST /api/v1/feeds", () => {
+        let newFeed: IFeedTest;
         beforeEach(() => {
             newFeed = {
                 headline: faker.lorem.sentence(),
                 url: faker.internet.url(),
                 author: faker.name.fullName(),
                 location: faker.address.cityName(),
-                footer: faker.lorem.sentence(),
-            }
-        })
-        test('should return 201 and successfully create new feed if data is ok', async () => {
-            await insertFeeds([feedOne])
+                footer: faker.lorem.sentence()
+            };
+        });
+        test("should return 201 and successfully create new feed if data is ok", async () => {
+            await insertFeeds([feedOne]);
 
             const res = await request(app)
-                .post('/api/v1/feeds')
+                .post("/api/v1/feeds")
                 .send(newFeed)
                 .expect(httpStatus.CREATED);
 
@@ -45,21 +49,36 @@ describe('Feed routes', () => {
             expect(dbFeed).toBeDefined();
             expect(dbFeed).toMatchObject({ headline: newFeed.headline });
         });
-        test('should return 400 error if feed data is not correct', async () => {
-            newFeed.headline = null
-            console.log('newFeed', newFeed)
+        test("should return 400 error if feed data is not correct", async () => {
+            newFeed.headline = null;
+            console.log("newFeed", newFeed);
             await request(app)
-                .post('/api/v1/feeds')
+                .post("/api/v1/feeds")
                 .send(newFeed)
                 .expect(httpStatus.BAD_REQUEST);
         });
-    })
-    describe('GET /api/v1/feeds', () => {
-        test('hould return 200 and an array of feeds', async () => {
+    });
+
+    describe("POST /api/v1/feeds/today", () => {
+        test("should return 200 and successfully store the new feeds", async () => {
+            const res = await request(app)
+                .post("/api/v1/feeds/today")
+                .expect(httpStatus.OK);
+        });
+    });
+    describe("GET /api/v1/feeds/today", () => {
+        test("should return 200 and return a list of feeds", async () => {
+            const res = await request(app)
+                .get("/api/v1/feeds/today")
+                .expect(httpStatus.OK);
+        });
+    });
+    describe("GET /api/v1/feeds", () => {
+        test("hould return 200 and an array of feeds", async () => {
             await insertFeeds([feedOne, feedTwo, feedThree]);
 
             const res = await request(app)
-                .get('/api/v1/feeds')
+                .get("/api/v1/feeds")
                 .send()
                 .expect(httpStatus.OK);
 
@@ -74,11 +93,11 @@ describe('Feed routes', () => {
                 footer: feedOne.footer,
                 publishedAt: feedOne.publishedAt
             });
-        })
-    })
+        });
+    });
 
-    describe('GET /api/v1/feeds/:feedId', () => {
-        test('should return 200 and the feed object if data is ok', async () => {
+    describe("GET /api/v1/feeds/:feedId", () => {
+        test("should return 200 and the feed object if data is ok", async () => {
             await insertFeeds([feedOne]);
 
             const res = await request(app)
@@ -95,9 +114,9 @@ describe('Feed routes', () => {
                 footer: feedOne.footer,
                 publishedAt: feedOne.publishedAt
             });
-        })
+        });
 
-        test('should return 404 error if feed is not found', async () => {
+        test("should return 404 error if feed is not found", async () => {
             await insertFeeds([feedOne]);
 
             await request(app)
@@ -105,9 +124,9 @@ describe('Feed routes', () => {
                 .send()
                 .expect(httpStatus.NOT_FOUND);
         });
-    })
-    describe('DELETE /api/v1/feeds/:feedId', () => {
-        test('should return 204 if data is ok', async () => {
+    });
+    describe("DELETE /api/v1/feeds/:feedId", () => {
+        test("should return 204 if data is ok", async () => {
             await insertFeeds([feedOne]);
 
             await request(app)
@@ -119,7 +138,7 @@ describe('Feed routes', () => {
             expect(dbFeed).toBeNull();
         });
 
-        test('should return 404 error if feed already is not found', async () => {
+        test("should return 404 error if feed already is not found", async () => {
             await insertFeeds([feedTwo]);
 
             await request(app)
@@ -128,15 +147,15 @@ describe('Feed routes', () => {
                 .expect(httpStatus.NOT_FOUND);
         });
     });
-    describe('PATCH /api/v1/feeds/:feedId', () => {
-        test('should return 200 and successfully update feed if data is ok', async () => {
+    describe("PATCH /api/v1/feeds/:feedId", () => {
+        test("should return 200 and successfully update feed if data is ok", async () => {
             await insertFeeds([feedOne]);
             const updateBody: IFeedTest = {
                 headline: faker.lorem.sentence(),
                 url: faker.internet.url(),
                 author: faker.name.fullName(),
                 location: faker.address.cityName(),
-                footer: faker.lorem.sentence(),
+                footer: faker.lorem.sentence()
             };
 
             const res = await request(app)
@@ -159,14 +178,14 @@ describe('Feed routes', () => {
             expect(dbFeed).toMatchObject({ headline: updateBody.headline });
         });
 
-        test('should return 404 if admin is updating another feed that is not found', async () => {
+        test("should return 404 if admin is updating another feed that is not found", async () => {
             await insertFeeds([feedTwo]);
             const updateBody: IFeedTest = {
                 headline: faker.lorem.sentence(),
                 url: faker.internet.url(),
                 author: faker.name.fullName(),
                 location: faker.address.cityName(),
-                footer: faker.lorem.sentence(),
+                footer: faker.lorem.sentence()
             };
             await request(app)
                 .patch(`/api/v1/feeds/${feedOne._id}`)
@@ -174,6 +193,4 @@ describe('Feed routes', () => {
                 .expect(httpStatus.NOT_FOUND);
         });
     });
-})
-
-
+});
