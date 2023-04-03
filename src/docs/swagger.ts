@@ -31,7 +31,8 @@ const swaggerDocument: SwaggerOptions = {
     ],
     paths: {
         "/feeds": feedPaths.feeds,
-        "/feeds/{id}": feedPaths.feedsId
+        "/feeds/{id}": feedPaths.feedsId,
+        "/feeds/today": feedPaths.todayFeeds
     },
     definitions: {
         Feed: feedDefinitions
