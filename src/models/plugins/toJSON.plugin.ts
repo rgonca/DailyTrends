@@ -4,7 +4,11 @@
  *  - replaces _id with id
  */
 
-const deleteAtPath = (obj: { [x: string]: any; }, path: string | any[], index: number) => {
+const deleteAtPath = (
+    obj: { [x: string]: any },
+    path: string | any[],
+    index: number
+) => {
     if (index === path.length - 1) {
         delete obj[path[index]];
         return;
@@ -19,10 +23,20 @@ const toJSON = (schema: any) => {
     }
 
     schema.options.toJSON = Object.assign(schema.options.toJSON || {}, {
-        transform(doc: any, ret: { [x: string]: any; id?: any; _id?: any; createdAt?: any; updatedAt?: any; }, options: any) {
+        transform(
+            doc: any,
+            ret: {
+                [x: string]: any;
+                id?: any;
+                _id?: any;
+                createdAt?: any;
+                updatedAt?: any;
+            },
+            options: any
+        ) {
             Object.keys(schema.paths).forEach((path) => {
                 if (schema.paths[path].options && schema.paths[path].options.private) {
-                    deleteAtPath(ret, path.split('.'), 0);
+                    deleteAtPath(ret, path.split("."), 0);
                 }
             });
 
@@ -34,7 +48,7 @@ const toJSON = (schema: any) => {
             if (transform) {
                 return transform(doc, ret, options);
             }
-        },
+        }
     });
 };
 

@@ -13,19 +13,20 @@ const feedSchema = new Schema<IFeed>({
     },
     author: {
         type: String
-    }, location: {
+    },
+    location: {
         type: String
-    }, footer: {
+    },
+    footer: {
         type: String
     },
     publishedAt: {
-        type: String,
+        type: String
     }
-})
-
+});
 
 feedSchema.plugin(toJSON);
 
-const Feed = model<IFeed>('Feed', feedSchema);
+const Feed = model<IFeed>("Feed", feedSchema);
 
-export default Feed
+export default Feed;

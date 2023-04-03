@@ -38,9 +38,4 @@ const insertFeeds = async (feeds: IFeedFixture[]) => {
     await Feed.insertMany(feeds);
 };
 
-export {
-    feedOne,
-    feedTwo,
-    feedThree,
-    insertFeeds,
-};
+export { feedOne, feedTwo, feedThree, insertFeeds };

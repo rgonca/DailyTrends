@@ -66,6 +66,7 @@ describe("Feed routes", () => {
                 .expect(httpStatus.OK);
         });
     });
+
     describe("GET /api/v1/feeds/today", () => {
         test("should return 200 and return a list of feeds", async () => {
             const res = await request(app)

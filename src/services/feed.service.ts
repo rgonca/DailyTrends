@@ -9,8 +9,8 @@ import { scrapeElMundoNews, scrapeElPaisNews } from "../middlewares/scraper";
  */
 
 const createFeed = async (feedBody: IFeed) => {
-    return Feed.create(feedBody)
-}
+    return Feed.create(feedBody);
+};
 
 /**
  * stores feeds from the webscrapping after filtering possible repetitions
@@ -20,16 +20,18 @@ const createFeed = async (feedBody: IFeed) => {
 
 const storeFeeds = async (date: string) => {
     let news: object[] = [];
-    const elPaisNews = await scrapeElPaisNews()
-    const elMundoNews = await scrapeElMundoNews()
-    news = [...news, ...elPaisNews, ...elMundoNews]
-    const currentFeeds = await Feed.find({ publishedAt: date })
+    const elPaisNews = await scrapeElPaisNews();
+    const elMundoNews = await scrapeElMundoNews();
+    news = [...news, ...elPaisNews, ...elMundoNews];
+    const currentFeeds = await Feed.find({ publishedAt: date });
     const result = news.filter((elm: IFeed) => {
-        return !currentFeeds.some(feed => feed.headline === elm.headline && feed.url === elm.url)
-    })
-    const feeds = await Feed.insertMany(result)
-    return feeds
-}
+        return !currentFeeds.some(
+            (feed) => feed.headline === elm.headline && feed.url === elm.url
+        );
+    });
+    const feeds = await Feed.insertMany(result);
+    return feeds;
+};
 
 /**
  * Get all feeds
@@ -37,9 +39,9 @@ const storeFeeds = async (date: string) => {
  */
 
 const getFeeds = async () => {
-    const feeds = await Feed.find()
-    return feeds
-}
+    const feeds = await Feed.find();
+    return feeds;
+};
 
 /**
  * Get todays feeds, if there are no feeds those are introduced to database
@@ -48,14 +50,13 @@ const getFeeds = async () => {
  */
 
 const getTodayFeeds = async (date: string) => {
-    const todayFeeds = await Feed.find({ publishedAt: date })
+    const todayFeeds = await Feed.find({ publishedAt: date });
     if (todayFeeds.length === 0) {
-        const feeds = await storeFeeds(date)
-        return feeds
+        const feeds = await storeFeeds(date);
+        return feeds;
     }
-    return todayFeeds
-}
-
+    return todayFeeds;
+};
 
 /**
  * Get feed by id
@@ -64,9 +65,9 @@ const getTodayFeeds = async (date: string) => {
  */
 
 const getFeedById = async (id: String) => {
-    const feeds = await Feed.findById(id)
-    return feeds
-}
+    const feeds = await Feed.findById(id);
+    return feeds;
+};
 
 /**
  * Update feed by id
@@ -76,9 +77,9 @@ const getFeedById = async (id: String) => {
  */
 
 const updateFeed = async (feedId: String, updateBody: IFeed) => {
-    const feeds = await Feed.findByIdAndUpdate(feedId, updateBody, { new: true })
-    return feeds
-}
+    const feeds = await Feed.findByIdAndUpdate(feedId, updateBody, { new: true });
+    return feeds;
+};
 
 /**
  * Delete feed by id
@@ -87,7 +88,15 @@ const updateFeed = async (feedId: String, updateBody: IFeed) => {
  */
 
 const deleteFeed = async (feedId: String) => {
-    const feeds = await Feed.findByIdAndDelete(feedId)
-    return feeds
-}
-export default { createFeed, storeFeeds, getFeeds, getTodayFeeds, getFeedById, updateFeed, deleteFeed }
+    const feeds = await Feed.findByIdAndDelete(feedId);
+    return feeds;
+};
+export default {
+    createFeed,
+    storeFeeds,
+    getFeeds,
+    getTodayFeeds,
+    getFeedById,
+    updateFeed,
+    deleteFeed
+};

@@ -19,7 +19,7 @@ interface IFeedTest {
 }
 
 interface IFeedFixture {
-    _id: Types.ObjectId,
+    _id: Types.ObjectId;
     headline: string;
     url?: string;
     author: string;
@@ -28,8 +28,4 @@ interface IFeedFixture {
     publishedAt: string;
 }
 
-export {
-    IFeed,
-    IFeedTest,
-    IFeedFixture
-}
+export { IFeed, IFeedTest, IFeedFixture };

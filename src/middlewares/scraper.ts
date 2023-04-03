@@ -15,8 +15,15 @@ const scrapeElPaisNews = async () => {
             const author = $(element).find(".c_a_a").text().trim();
             const location = $(element).find(".c_a_l").text().trim();
             const footer = $(element).find(".c_d").text().trim();
-            const publishedAt = currentDate
-            const articleObj: IFeed = { headline, url, author, location, footer, publishedAt };
+            const publishedAt = currentDate;
+            const articleObj: IFeed = {
+                headline,
+                url,
+                author,
+                location,
+                footer,
+                publishedAt
+            };
             articles.push(articleObj);
         }
     });
@@ -52,7 +59,7 @@ const scrapeElMundoNews = async () => {
                 .find(".ue-c-cover-content__footer")
                 .text()
                 .trim();
-            const publishedAt = currentDate
+            const publishedAt = currentDate;
 
             if (headline) {
                 const articleObj: IFeed = {

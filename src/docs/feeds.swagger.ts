@@ -1,4 +1,3 @@
-
 const getFeeds = {
     tags: ["Feeds"],
     summary: "Get list of Feeds",
@@ -182,7 +181,6 @@ const storeTodayFeeds = {
     }
 };
 
-
 const getTodayFeeds = {
     tags: ["Feeds"],
     summary: "Get list of today Feeds",
@@ -249,6 +247,5 @@ const feedPaths = {
         get: getTodayFeeds
     }
 };
-
 
 export { feedPaths, feedDefinitions, feedSchema, feedParameters };
