@@ -1,9 +1,6 @@
 import { Schema, model } from "mongoose";
+import { IFeed } from "../interfaces/feed.interface";
 import toJSON from "./plugins/toJSON.plugin";
-
-interface IFeed {
-    title: string;
-}
 
 const feedSchema = new Schema<IFeed>({
     title: {
