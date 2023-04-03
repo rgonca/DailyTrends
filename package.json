@@ -4,7 +4,6 @@
   "description": "A daily news feed",
   "main": "src/index.ts",
   "scripts": {
-    "start": "NODE_ENV=production NODE_PATH=./src ts-node-dev src/index.ts",
     "dev": "NODE_ENV=development NODE_PATH=./src ts-node-dev src/index.ts",
     "test": "jest -i --colors --verbose --detectOpenHandles",
     "test:watch": "jest -i --watchAll"
