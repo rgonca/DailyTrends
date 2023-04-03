@@ -1,12 +1,19 @@
 import { faker } from "@faker-js/faker";
 import Feed from "../../../src/models/feed.model";
-import { IFeedUnitTest } from "../../../src/interfaces/feed.interface";
+import { IFeedTest } from "../../../src/interfaces/feed.interface";
+import currentDate from "../../../src/utils/date";
+
 describe('Feed model', () => {
     describe('Feed validation', () => {
-        let newFeed: IFeedUnitTest;
+        let newFeed: IFeedTest;
         beforeEach(() => {
             newFeed = {
-                title: faker.lorem.sentence()
+                headline: faker.lorem.sentence(),
+                url: faker.internet.url(),
+                author: faker.name.fullName(),
+                location: faker.address.cityName(),
+                footer: faker.lorem.sentence(),
+                publishedAt: currentDate
             }
         })
 
@@ -15,7 +22,7 @@ describe('Feed model', () => {
         });
 
         test('should throw a validation error if title is null', async () => {
-            newFeed.title = null;
+            newFeed.headline = null;
             await expect(new Feed(newFeed).validate()).rejects.toThrow();
         });
     })

@@ -6,16 +6,21 @@ import app from "../../src/app";
 import setupTestDB from '../utils/setupTestDB'
 import Feed from '../../src/models/feed.model';
 import { feedOne, feedTwo, feedThree, insertFeeds } from '../fixtures/feed.fixture';
-import { IFeedUnitTest } from '../../src/interfaces/feed.interface';
+import { IFeedTest } from '../../src/interfaces/feed.interface';
+import currentDate from '../../src/utils/date';
 setupTestDB();
 
 
 describe('Feed routes', () => {
     describe('POST /api/v1/feeds', () => {
-        let newFeed: IFeedUnitTest
+        let newFeed: IFeedTest
         beforeEach(() => {
             newFeed = {
-                title: faker.lorem.paragraph()
+                headline: faker.lorem.sentence(),
+                url: faker.internet.url(),
+                author: faker.name.fullName(),
+                location: faker.address.cityName(),
+                footer: faker.lorem.sentence(),
             }
         })
         test('should return 201 and successfully create new feed if data is ok', async () => {
@@ -28,15 +33,20 @@ describe('Feed routes', () => {
 
             expect(res.body).toEqual({
                 id: expect.anything(),
-                title: newFeed.title,
+                headline: newFeed.headline,
+                url: newFeed.url,
+                author: newFeed.author,
+                location: newFeed.location,
+                footer: newFeed.footer,
+                publishedAt: currentDate
             });
 
             const dbFeed = await Feed.findById(res.body.id);
             expect(dbFeed).toBeDefined();
-            expect(dbFeed).toMatchObject({ title: newFeed.title });
+            expect(dbFeed).toMatchObject({ headline: newFeed.headline });
         });
         test('should return 400 error if feed data is not correct', async () => {
-            newFeed.title = null
+            newFeed.headline = null
             console.log('newFeed', newFeed)
             await request(app)
                 .post('/api/v1/feeds')
@@ -57,7 +67,12 @@ describe('Feed routes', () => {
             expect(res.body).toHaveLength(3);
             expect(res.body[0]).toEqual({
                 id: feedOne._id.toHexString(),
-                title: feedOne.title,
+                headline: feedOne.headline,
+                url: feedOne.url,
+                author: feedOne.author,
+                location: feedOne.location,
+                footer: feedOne.footer,
+                publishedAt: feedOne.publishedAt
             });
         })
     })
@@ -71,10 +86,14 @@ describe('Feed routes', () => {
                 .send()
                 .expect(httpStatus.OK);
 
-            expect(res.body).not.toHaveProperty('password');
             expect(res.body).toEqual({
                 id: feedOne._id.toHexString(),
-                title: feedOne.title,
+                headline: feedOne.headline,
+                url: feedOne.url,
+                author: feedOne.author,
+                location: feedOne.location,
+                footer: feedOne.footer,
+                publishedAt: feedOne.publishedAt
             });
         })
 
@@ -112,8 +131,12 @@ describe('Feed routes', () => {
     describe('PATCH /api/v1/feeds/:feedId', () => {
         test('should return 200 and successfully update feed if data is ok', async () => {
             await insertFeeds([feedOne]);
-            const updateBody: IFeedUnitTest = {
-                title: faker.lorem.sentence()
+            const updateBody: IFeedTest = {
+                headline: faker.lorem.sentence(),
+                url: faker.internet.url(),
+                author: faker.name.fullName(),
+                location: faker.address.cityName(),
+                footer: faker.lorem.sentence(),
             };
 
             const res = await request(app)
@@ -123,18 +146,27 @@ describe('Feed routes', () => {
 
             expect(res.body).toEqual({
                 id: feedOne._id.toHexString(),
-                title: updateBody.title,
+                headline: updateBody.headline,
+                url: updateBody.url,
+                author: updateBody.author,
+                location: updateBody.location,
+                footer: updateBody.footer,
+                publishedAt: feedOne.publishedAt
             });
 
             const dbFeed = await Feed.findById(feedOne._id);
             expect(dbFeed).toBeDefined();
-            expect(dbFeed).toMatchObject({ title: updateBody.title });
+            expect(dbFeed).toMatchObject({ headline: updateBody.headline });
         });
 
         test('should return 404 if admin is updating another feed that is not found', async () => {
             await insertFeeds([feedTwo]);
-            const updateBody: IFeedUnitTest = {
-                title: faker.lorem.sentence()
+            const updateBody: IFeedTest = {
+                headline: faker.lorem.sentence(),
+                url: faker.internet.url(),
+                author: faker.name.fullName(),
+                location: faker.address.cityName(),
+                footer: faker.lorem.sentence(),
             };
             await request(app)
                 .patch(`/api/v1/feeds/${feedOne._id}`)

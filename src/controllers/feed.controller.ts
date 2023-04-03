@@ -2,15 +2,24 @@ import { Request, Response } from "express";
 import feedService from "../services/feed.service";
 import httpStatus from "http-status";
 import { IFeed } from "../interfaces/feed.interface";
-
+import currentDate from "../utils/date";
 const createFeed = async (req: Request, res: Response) => {
     try {
-        const { title } = req.body as IFeed
-        if (!title) {
+        const { headline, url, author = '', location = '', footer = '' } = req.body
+
+        if (!headline || !url) {
             res.status(httpStatus.BAD_REQUEST).send('Invalid feed data');
             return;
         }
-        const feed = await feedService.createFeed(req.body as IFeed)
+        const feedBody: IFeed = {
+            headline: headline,
+            url: url,
+            author: author,
+            location: location,
+            footer: footer,
+            publishedAt: currentDate
+        }
+        const feed = await feedService.createFeed(feedBody)
         res.status(httpStatus.CREATED).send(feed)
     } catch (error) {
         res.send(error);
@@ -44,8 +53,8 @@ const updateFeed = async (req: Request, res: Response) => {
         if (!feed) {
             return res.status(httpStatus.NOT_FOUND).send()
         }
-        const { title } = req.body as IFeed
-        if (!title) {
+        const { headline } = req.body as IFeed
+        if (!headline) {
             res.status(httpStatus.BAD_REQUEST).send('Invalid feed data');
             return;
         }

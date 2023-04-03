@@ -3,9 +3,23 @@ import { IFeed } from "../interfaces/feed.interface";
 import toJSON from "./plugins/toJSON.plugin";
 
 const feedSchema = new Schema<IFeed>({
-    title: {
+    headline: {
         type: String,
         required: true
+    },
+    url: {
+        type: String,
+        required: true
+    },
+    author: {
+        type: String
+    }, location: {
+        type: String
+    }, footer: {
+        type: String
+    },
+    publishedAt: {
+        type: String,
     }
 })
 

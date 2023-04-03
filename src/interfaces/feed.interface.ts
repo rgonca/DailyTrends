@@ -1,19 +1,35 @@
 import { Types } from "mongoose";
 
 interface IFeed {
-    title: string;
+    headline: string;
+    url?: string;
+    author: string;
+    location: string;
+    footer: string;
+    publishedAt: string;
 }
 
-interface IFeedUnitTest {
-    title: string | null;
+interface IFeedTest {
+    headline: string | null;
+    url?: string;
+    author: string;
+    location: string;
+    footer: string;
+    publishedAt?: string;
 }
 
-interface IFeedIntegrationTest {
+interface IFeedFixture {
     _id: Types.ObjectId,
-    title: string;
+    headline: string;
+    url?: string;
+    author: string;
+    location: string;
+    footer: string;
+    publishedAt: string;
 }
+
 export {
     IFeed,
-    IFeedUnitTest,
-    IFeedIntegrationTest
+    IFeedTest,
+    IFeedFixture
 }
